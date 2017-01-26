@@ -1,0 +1,180 @@
+using System.Collections.Generic;
+
+namespace TwitchLib.TwitchIRC
+{
+    /// <summary>
+    /// This class contains an IRC message in a parsed form
+    /// </summary>
+    /// <threadsafety static="true" instance="true" />
+    public class IrcMessageData
+    {
+        private IrcClient   _Irc;
+        private string      _From;
+        private string      _Nick;
+        private string      _Ident;
+        private string      _Host;
+        private string      _Channel;
+        private string      _Message;
+        private string[]    _MessageArray;
+        private string      _RawMessage;
+        private string[]    _RawMessageArray;
+        private Dictionary<string, string> _Tags;
+        private ReceiveType _Type;
+        private ReplyCode   _ReplyCode;
+        
+        /// <summary>
+        /// Gets the IrcClient object the message originated from
+        /// </summary>
+        public IrcClient Irc {
+            get {
+                return _Irc;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the combined nickname, identity and hostname of the user that sent the message
+        /// </summary>
+        /// <example>
+        /// nick!ident@host
+        /// </example>
+        public string From {
+            get {
+                return _From;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the nickname of the user that sent the message
+        /// </summary>
+        public string Nick {
+            get {
+                return _Nick;
+            }
+        }
+
+        /// <summary>
+        /// Gets the identity (username) of the user that sent the message
+        /// </summary>
+        public string Ident {
+            get {
+                return _Ident;
+            }
+        }
+
+        /// <summary>
+        /// Gets the hostname of the user that sent the message
+        /// </summary>
+        public string Host {
+            get {
+                return _Host;
+            }
+        }
+
+        /// <summary>
+        /// Gets the channel the message originated from
+        /// </summary>
+        public string Channel {
+            get {
+                return _Channel;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the message
+        /// </summary>
+        public string Message {
+            get {
+                return _Message;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the message as an array of strings (splitted by space)
+        /// </summary>
+        public string[] MessageArray {
+            get {
+                return _MessageArray;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the raw message sent by the server
+        /// </summary>
+        public string RawMessage {
+            get {
+                return _RawMessage;
+            }
+        }
+        
+        /// <summary>
+        /// Gets the raw message sent by the server as array of strings (splitted by space)
+        /// </summary>
+        public string[] RawMessageArray {
+            get {
+                return _RawMessageArray;
+            }
+        }
+
+        /// <summary>
+        /// Gets the message tags sent by the server as a dictionary
+        /// </summary>
+        public Dictionary<string, string> Tags {
+            get {
+                return _Tags;
+            }
+        }
+
+        /// <summary>
+        /// Gets the message type
+        /// </summary>
+        public ReceiveType Type {
+            get {
+                return _Type;
+            }
+        }
+
+        /// <summary>
+        /// Gets the message reply code
+        /// </summary>
+        public ReplyCode ReplyCode {
+            get {
+                return _ReplyCode;
+            }
+        }
+
+        /// <summary>
+        /// Constructor to create an instance of IrcMessageData
+        /// </summary>
+        /// <param name="ircclient">IrcClient the message originated from</param>
+        /// <param name="from">combined nickname, identity and host of the user that sent the message (nick!ident@host)</param>
+        /// <param name="nick">nickname of the user that sent the message</param>
+        /// <param name="ident">identity (username) of the userthat sent the message</param>
+        /// <param name="host">hostname of the user that sent the message</param>
+        /// <param name="channel">channel the message originated from</param>
+        /// <param name="message">message</param>
+        /// <param name="rawmessage">raw message sent by the server</param>
+        /// <param name="type">message type</param>
+        /// <param name="replycode">message reply code</param>
+        /// <param name="rawTags">raw tags data sent by the server</param>
+        /// <param name="tags">Dictionary of separated and unescaped tags</param>
+        public IrcMessageData(IrcClient ircclient, string from, string nick, string ident, string host, string channel, string message, string rawmessage, ReceiveType type, ReplyCode replycode, Dictionary<string, string> tags)
+        {
+            _Irc = ircclient;
+            _RawMessage = rawmessage;
+            _RawMessageArray = rawmessage.Split(new char[] {' '});
+            _Type = type;
+            _ReplyCode = replycode;
+            _From = from;
+            _Nick = nick;
+            _Ident = ident;
+            _Host = host;
+            _Channel = channel;
+            if (message != null) {
+                // message is optional
+                _Message = message;
+                _MessageArray = message.Split(new char[] {' '});
+            }
+            _Tags = tags;
+        }
+    }
+}
